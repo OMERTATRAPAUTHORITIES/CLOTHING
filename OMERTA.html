@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Omerta Trap Authority - Request Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
+      margin: 0;
+    }
+    form {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      border: 2px solid black;
+      border-radius: 10px;
+      background: #fafafa;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: black;
+      color: white;
+      border: none;
+      margin-top: 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #222;
+    }
+    .success-message, .error-message {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    .success-message {
+      background: #e0ffe0;
+      color: #226622;
+      border: 1px solid #66bb66;
+    }
+    .error-message {
+      background: #ffe0e0;
+      color: #aa2222;
+      border: 1px solid #bb6666;
+    }
+    @media (max-width: 500px) {
+      form {
+        border-width: 1px;
+        padding: 10px;
+      }
+      body {
+        padding-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form id="requestForm" action="https://formspree.io/f/mowwvopp" method="POST">
+    <h2>Request a Piece</h2>
+
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" required>
+
+    <label for="item">Select Item:</label>
+    <select name="item" id="item" required>
+      <option value="">-- Choose an item --</option>
+      <option value="Tank Top">Tank Top</option>
+      <option value="Red Jacket">Red Jacket</option>
+      <option value="Shirt with Vest">Shirt with Vest</option>
+    </select>
+
+    <label for="message">Message (Optional):</label>
+    <textarea name="message" id="message" rows="4"></textarea>
+
+    <button type="submit">Submit Request</button>
+    <div class="success-message" id="successMsg">Thank you! Your request has been sent.</div>
+    <div class="error-message" id="errorMsg">Sorry, there was an error. Please try again.</div>
+  </form>
+
+  <script>
+    // Optional: AJAX submit with user feedback (only works if CORS is allowed by Formspree)
+    document.getElementById('requestForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const successMsg = document.getElementById('successMsg');
+      const errorMsg = document.getElementById('errorMsg');
+      successMsg.style.display = "none";
+      errorMsg.style.display = "none";
+      try {
+        const res = await fetch(form.action, {
+          method: form.method,
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.reset();
+          successMsg.style.display = "block";
+        } else {
+          throw new Error("Network response was not ok.");
+        }
+      } catch (err) {
+        errorMsg.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
